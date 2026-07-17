@@ -1,79 +1,66 @@
-# Liquid-Batching-System-TIA-Portal
-Industrial automation project using Siemens TIA Portal V17 - PLC programming, HMI design, and safety systems for liquid batching process
+# Liquid Batching System - Industrial Automation Project
 
-SEQUENCE :
-IF #safety_Estop OR #pump_overload OR #stop_btn THEN
-    #current_step := 99
-    ;
-END_IF;
-// --- 2. STATE MACHINE ---
-CASE #current_step OF
-    0:  // IDLE (Waiting for Start)
-        // Turn off all outputs to ensure safe state
-        #pump1_run := FALSE;
-        #MainTank_LiqA_valve := FALSE;
-        #MainTank_LiqB_valve := FALSE;
-        #MainTank_heater := FALSE;
-        #MainTank_mixer := FALSE;
-        #MainTank_drain_valve := FALSE;
-        IF #start_btn THEN
-            #current_step := 10;
-        END_IF;
-        
-    10:  // Fill liquid A
-        #pump1_run := TRUE;
-        #MainTank_LiqA_valve := TRUE;
-        IF #MainTank_Level_1 THEN
-            #pump1_run := FALSE;
-            #MainTank_LiqA_valve := FALSE;
-            #current_step := 20;
-        END_IF;
-    20: // Fill liquid B
-        #MainTank_LiqB_valve := TRUE;
-        IF #MainTank_Level_2 THEN
-            #MainTank_LiqB_valve := FALSE;
-            #current_step := 30;
-        END_IF;
-    30: // Heating
-        #MainTank_heater := TRUE;
-        IF #actual_temp >= #temp_hmi_setpoint THEN
-            #MainTank_heater := FALSE;
-            #current_step := 40;
-            ;
-        END_IF;
-        
-        
-        ;
-    40: // MIXER
-        #MainTank_mixer := TRUE;
-        
-        #time_set_point_time:= INT_TO_TIME(#mix_time_setpoint);
-        
-        #mix_timer.TON(IN:= TRUE,
-                       PT:= #time_set_point_time );
-        IF #mix_timer.Q THEN
-            #mix_timer.TON(IN := FALSE, PT:= #time_set_point_time);
-            #MainTank_mixer := FALSE;
-            #current_step := 50;
-            ;
-        END_IF;
-   
-    50: // DRAINING
-        #MainTank_drain_valve := TRUE;
-        IF #MainTank_Level_low THEN
-            #MainTank_drain_valve := FALSE;
-            #current_step := 0;
-            ;
-        END_IF;
-    99: // ERROR
-        #pump1_run := FALSE;
-        #MainTank_LiqA_valve := FALSE;
-        #MainTank_LiqB_valve := FALSE;
-        #MainTank_heater := FALSE;
-        #MainTank_mixer := FALSE;
-        #MainTank_drain_valve := FALSE;
-        IF #reset_fault THEN
-            #current_step := 0;
-        END_IF;
-        ;
-END_CASE;
+**Technologies:** Siemens TIA Portal V17 | S7-1200 PLC | KTP700 HMI | PROFINET
+
+📺 **Watch Demo Video:** [Link to your YouTube video]
+
+## 🎯 Project Overview
+Automated liquid batching system that fills a tank with two liquids in sequence, heats to a setpoint temperature, mixes for a specified time, and drains. Includes comprehensive safety interlocks, alarm management, and HMI visualization.
+
+## 🏭 Key Features
+- **Sequential Control:** State machine architecture using CASE statements in SCL
+- **Safety Systems:** Emergency stop, pump overload protection, high-temperature alarms
+- **Analog Processing:** Temperature scaling (NORM_X/SCALE_X) from 4-20mA sensor
+- **HMI Design:** Intuitive operator interface with color animations, setpoint controls, and alarm codes
+- **Fault Handling:** Multi-alarm code system for quick troubleshooting
+
+## 📋 System Specifications
+- **PLC:** Siemens S7-1214C DC/DC/DC
+- **HMI:** KTP700 Basic PN
+- **Programming Languages:** SCL (Structured Control Language), Ladder Logic
+- **Communication:** PROFINET industrial Ethernet
+
+## 🏗️ Architecture
+### Sequence of Operations:
+1. Fill Liquid A (Pump + Valve A) → Level Sensor 1
+2. Fill Liquid B (Valve B) → Level Sensor 2
+3. Heating → Temperature Setpoint
+4. Mixing → Timer-based control
+5. Draining → Level Low Sensor
+
+### Safety Features:
+- E-Stop immediately halts all outputs (Step 99)
+- Pump overload protection
+- High-temperature alarm (>90°C)
+- Interlock checking before each step
+
+## 📂 Project Structure
+PLC_Code/
+├── OB1_Main.scl (Main program cycle)
+├── FB_Sequence_Control.scl (State machine logic)
+├── DB_HMI_Commands.db (HMI interface tags)
+└── DB_Process_Data.db (Process variables)
+
+
+##  Demo Video
+[Embed YouTube video or link to MP4]
+
+## 🛠️ Skills Demonstrated
+- PLC Programming (SCL, Ladder)
+- HMI/SCADA Design
+- Analog Signal Processing
+- Safety System Design
+- Industrial Communication (PROFINET)
+- State Machine Architecture
+- Alarm Management
+- Factory Acceptance Testing (FAT)
+
+## 💼 This project demonstrates my ability to:
+✅ Design complete automation systems from concept to HMI  
+✅ Implement industrial safety standards and fault handling  
+✅ Write clean, structured, maintainable PLC code  
+✅ Create intuitive operator interfaces  
+
+---
+**Author:** sofienne nabli 
+**Contact:** sofianesprit@gmail.com | https://www.linkedin.com/in/sofienne-nabli-b260b0191/
