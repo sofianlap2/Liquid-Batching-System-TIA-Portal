@@ -2,7 +2,7 @@
 
 **Technologies:** Siemens TIA Portal V17 | S7-1200 PLC | KTP700 HMI | PROFINET
 
-📺 **Watch Demo Video:** [Link to your YouTube video]
+📺 **Watch Demo Video:** https://youtu.be/bf9yCLkUwGU
 
 ## 🎯 Project Overview
 Automated liquid batching system that fills a tank with two liquids in sequence, heats to a setpoint temperature, mixes for a specified time, and drains. Includes comprehensive safety interlocks, alarm management, and HMI visualization.
@@ -43,7 +43,7 @@ PLC_Code/
 
 
 ##  Demo Video
-[Embed YouTube video or link to MP4]
+https://youtu.be/bf9yCLkUwGU
 
 ## 🛠️ Skills Demonstrated
 - PLC Programming (SCL, Ladder)
